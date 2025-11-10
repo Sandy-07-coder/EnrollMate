@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  web:
+    container_name: enrollmate_frontend
+    build: ./frontend
+    depends_on:
+      - api
+    ports:
+      - 5173:5173
+    env_file:
+      - ./frontend/.env
+    develop:
+      watch:
+        - path: ./frontend/package.json
+          action: rebuild
+        - path: ./frontend/package-lock.json
+          action: rebuild
+        - path: ./frontend
+          target: /app
+          action: sync
+    restart: unless-stopped
+
+  api:
+    container_name: enrollmate_backend
+    build: ./backend
+    depends_on:
+      - db
+    ports:
+      - 3001:3001
+    env_file:
+      - ./backend/.env
+    develop:
+      watch:
+        - path: ./backend/package.json
+          action: rebuild
+        - path: ./backend/package-lock.json
+          action: rebuild
+        - path: ./backend
+          target: /app
+          action: sync
+    restart: unless-stopped
+
+  db:
+    container_name: enrollmate_db
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - enrollmate_course_schedules:/data/db
+    restart: unless-stopped
+
+volumes:
+  enrollmate_course_schedules:
