@@ -49,7 +49,6 @@ export const getCoursesBySearch = async (req, res) => {
                 { uniqueId: { $regex: query, $options: "i" } },
             ]
         });
-
         res.status(200).json({ message: "fetched searched courses from db", courses });
 
     } catch (err) {

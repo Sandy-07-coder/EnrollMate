@@ -23,7 +23,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (courses.length === 0) {
+    if (courses?.length === 0) {
       getCourses();
     }
 
@@ -32,7 +32,7 @@ const HomePage = () => {
     }, 5 * 60 * 1000); // every 5 minutes
 
     return () => clearInterval(interval);
-  }, [courses.length, getCourses]);
+  }, [courses?.length, getCourses]);
 
   // Function to open conflict modal with conflict data
   const openConflictModal = (conflicts) => {
@@ -54,10 +54,6 @@ const HomePage = () => {
   // Function to close download modal
   const closeDownloadModal = () => {
     setIsDownloadModalOpen(false);
-  };
-
-  const goToFeedbackPage = () => {
-    navigate("/feedback");
   };
 
   return (
@@ -108,7 +104,7 @@ const HomePage = () => {
           <DownloadPDFModal closeModal={closeDownloadModal} />
         )}
 
-        <Footer goToFeedbackPage={goToFeedbackPage} />
+        <Footer />
       </main>
     </>
   );

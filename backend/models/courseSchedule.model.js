@@ -53,6 +53,6 @@ const courseScheduleSchema = new mongoose.Schema(
 );
 
 
-const CourseSchedule = mongoose.model("CourseSchedule", courseScheduleSchema);
+const CourseSchedule = mongoose.model("CourseSchedules", courseScheduleSchema);
 
 export default CourseSchedule;
