@@ -19,6 +19,7 @@ export const useCourseStore = create(
                 days: [],
                 times: [],
                 notConflict: false,
+                notSameSubject: false
             },
             filteredCourses: [],
             coursesByName: [],
@@ -101,7 +102,7 @@ export const useCourseStore = create(
 
             filterCourses: () => {
                 const { courses, selectedCourses, filterOptions } = get();
-                const { days, times, notConflict } = filterOptions;
+                const { days, times, notConflict, notSameSubject } = filterOptions;
 
                 let filteredCourses = filterByFreeDaysAndTimes(days, courses, times);
 
@@ -112,13 +113,19 @@ export const useCourseStore = create(
                     );
                 }
 
+                if(notSameSubject){
+                    filteredCourses = filteredCourses.filter((course) =>
+                        !hasSameSubjects(course, selectedCourses)
+                    );
+                }
+
                 set({ filteredCourses: filteredCourses });
 
             },
 
             // Set filter options
-            setFilterOptions: (days, times, notConflict) => {
-                set({ filterOptions: { days, times, notConflict } });
+            setFilterOptions: (days, times, notConflict,notSameSubject) => {
+                set({ filterOptions: { days, times, notConflict, notSameSubject } });
             },
 
             getCourseByName: (courseName) => {
