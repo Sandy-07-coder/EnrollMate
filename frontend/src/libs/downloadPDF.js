@@ -268,16 +268,16 @@ export const downloadTimetableHTML = async (selectedCourses, filename = 'timetab
       <table class="timetable">
         <thead>
           <tr>
-            <th style="width: 120px;">Time</th>
-            ${days.map(day => `<th>${day}</th>`).join('')}
+            <th style="width: 140px;">Day</th>
+            ${timeSlots.map(slot => `<th>${slot.label}</th>`).join('')}
           </tr>
         </thead>
         <tbody>
-          ${timeSlots.map(slot => `
+          ${days.map(day => `
             <tr>
-              <td class="time-slot">${slot.label}</td>
-              ${days.map(day => {
-            const course = timetableGrid[day][slot.value];
+              <td class="time-slot">${day}</td>
+              ${timeSlots.map(slot => {
+            const course = (timetableGrid[day] || {})[slot.value];
             if (course) {
                 return `
                     <td>
