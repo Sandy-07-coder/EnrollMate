@@ -55,36 +55,35 @@ const Footer = () => {
 
         {/* Main Footer Content */}
         <div className="flex flex-col items-center space-y-1.5 sm:space-y-2">
-          {/* Credits Section */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-4 text-xs sm:text-sm text-center">
-            {/* Concept by */}
-            <div className="flex items-center gap-1 sm:gap-2">
-              <span className="text-gray-400">💡 Concept by</span>
-              <span className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-400">
-                Prahathieswaran
-              </span>
-            </div>
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-4 text-xs sm:text-sm text-center">
+                    <div className="flex items-center gap-1 sm:gap-2">
+                    <span className="text-gray-400">💡 Concept by</span>
+                     
+                    <a href="http://www.linkedin.com/in/prakathis-wararn-5672b9372" target="_blank"  rel="noopener noreferrer"
+                    className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-yellow-400 to-yellow-300 hover:from-yellow-300 hover:to-yellow-200 transition-all duration-300 cursor-pointer">Prahathieswaran</a>
 
-            {/* Divider */}
+                    
+                    </div>
+
+                    {/* Divider */}
             <div className="hidden sm:block w-px h-4 bg-gray-600"></div>
 
-            {/* Built by */}
-            <div className="flex items-center gap-1 sm:gap-2">
-              <span className="text-gray-400">💻 Built with</span>
-              <span className="text-red-400 animate-pulse">❤️</span>
-              <span className="text-gray-400">by</span>
-              <a
-                href="https://www.linkedin.com/in/santhosh2673/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-green-400 to-teal-400 hover:from-green-300 hover:to-teal-300 transition-all duration-300 cursor-pointer"
-              >
-                Santhosh
-              </a>
-            </div>
-          </div>
+                  <div className="flex items-center gap-1 sm:gap-2">
+                    <span className="text-gray-400">💻 Built with</span>
+                    <span className="text-blue-400 animate-pulse">❤️</span>
+                    <span className="text-gray-400">by</span>
+                    <a
+                    href="https://www.linkedin.com/in/santhosh2673/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-cyan-400 hover:from-blue-300 hover:to-cyan-300 transition-all duration-300 cursor-pointer"
+                    >
+                    Santhosh
+                    </a>
+                  </div>
+                  </div>
 
-          {/* Copyright */}
+                  {/* Copyright */}
           <div className="text-xs text-gray-500 text-center">
             © {new Date().getFullYear()} EnrollMate. All rights reserved.
           </div>
