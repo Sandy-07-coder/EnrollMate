@@ -38,6 +38,9 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
   const [notConflict, setNotConflict] = useState(
     filterOptions.notConflict || false
   );
+  const [notSameSubject, setNotSameSubject] = useState(
+    filterOptions.notSameSubject || false
+  );
   const [showCourses, setShowCourses] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState(null);
 
@@ -69,7 +72,7 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
 
   // Apply filters
   const handleApplyFilters = () => {
-    setFilterOptions(selectedDays, selectedTimes, notConflict);
+    setFilterOptions(selectedDays, selectedTimes, notConflict,notSameSubject);
     filterCourses();
   };
 
@@ -78,6 +81,7 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
     setSelectedDays([]);
     setSelectedTimes([]);
     setNotConflict(false);
+    setNotSameSubject(false);
     setFilterOptions([], [], false);
     filterCourses();
     handleBackToSubjects();
@@ -250,7 +254,34 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
                     </label>
                   </div>
                 </div>
+
+                {/* Non-Selected Subject only */}
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
+                    Non-Selected Subject Filter
+                  </h3>
+                  <div className="flex items-center gap-3 bg-gray-900/50 p-4 rounded-lg hover:bg-gray-900 transition-colors duration-200">
+                    <Checkbox.Root
+                      checked={notSameSubject}
+                      onCheckedChange={(checked) => setNotSameSubject(checked)}
+                      className="w-5 h-5 bg-gray-700 border-2 border-gray-600 rounded flex items-center justify-center hover:border-purple-500 transition-colors duration-200 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+                      id="not-conflict"
+                    >
+                      <Checkbox.Indicator>
+                        <CheckIcon className="text-white" size={16} />
+                      </Checkbox.Indicator>
+                    </Checkbox.Root>
+                    <label
+                      htmlFor="not-conflict"
+                      className="text-gray-300 cursor-pointer flex-1"
+                    >
+                      Show only non-selected subjects
+                    </label>
+                  </div>
+                </div>
               </div>
+
 
               {/* Right Column - Filtered Results (3 columns) */}
               <div className="bg-gray-900/30 rounded-lg p-6 border border-gray-700/50 lg:col-span-3 flex flex-col">
