@@ -1,5 +1,6 @@
 import React from "react";
 import { useCourseStore } from "../store/courseStore";
+import { doSlotsOverlap, getSlotDuration } from "../utils/timeSlots";
 
 const TimeTable = () => {
   const { selectedCourses } = useCourseStore();
@@ -40,19 +41,47 @@ const TimeTable = () => {
       : courseColors[0];
   };
 
-  // Function to find course for a specific day and time slot
-  const getCourseForSlot = (day, timeSlot) => {
-    if (!selectedCourses || selectedCourses.length === 0) return null;
+  // Get all courses that overlap with a given 2-hour time block
+  // Returns an object with courses positioned by their 1-hour slot within the block
+  const getCoursesForBlock = (day, blockSlot) => {
+    if (!selectedCourses || selectedCourses.length === 0) return { left: null, right: null, full: null };
 
-    const course = selectedCourses.find((course) => {
-      if (!course.slots || course.slots.length === 0) return false;
+    const result = { left: null, right: null, full: null };
+    
+    // Parse block slot to get the two 1-hour slots it contains
+    // e.g., "8-10" contains "8-9" (left) and "9-10" (right)
+    const [blockStart, blockEnd] = blockSlot.split('-').map(s => parseInt(s, 10));
+    const leftSlot = `${blockStart}-${blockStart + 1}`;
+    const rightSlot = `${blockStart + 1}-${blockEnd}`;
 
-      return course.slots.some((slot) => {
-        return slot.day === day && slot.time === timeSlot;
+    selectedCourses.forEach((course) => {
+      if (!course.slots || course.slots.length === 0) return;
+
+      course.slots.forEach((slot) => {
+        if (slot.day !== day) return;
+
+        const duration = getSlotDuration(slot.time);
+        
+        // Check if this course overlaps with our block
+        if (doSlotsOverlap(slot.time, blockSlot)) {
+          if (duration === 2) {
+            // 2-hour course fills the entire block
+            if (slot.time === blockSlot) {
+              result.full = course;
+            }
+          } else if (duration === 1) {
+            // 1-hour course - determine if it's left or right half
+            if (slot.time === leftSlot || doSlotsOverlap(slot.time, leftSlot)) {
+              result.left = course;
+            } else if (slot.time === rightSlot || doSlotsOverlap(slot.time, rightSlot)) {
+              result.right = course;
+            }
+          }
+        }
       });
     });
 
-    return course || null;
+    return result;
   };
 
   return (
@@ -112,36 +141,84 @@ const TimeTable = () => {
                     </div>
                   </td>
 
-                  {/* Time Slot Cells - Equal width distribution */}
+                  {/* Time Slot Cells - Each cell can contain left half, right half, or full course */}
                   {TIME_SLOTS.map((slot) => {
-                    const scheduledCourse = getCourseForSlot(day, slot);
+                    const { left, right, full } = getCoursesForBlock(day, slot);
 
                     return (
                       <td
                         key={`${day}-${slot}`}
-                        className="px-0.5 py-1 sm:px-1 sm:py-2 text-center border-b border-l border-gray-600 cursor-pointer hover:bg-gray-600 transition-colors duration-200"
+                        className="px-0.5 py-1 sm:px-1 sm:py-2 border-b border-l border-gray-600 relative"
                       >
-                        <div className="min-h-12 sm:min-h-16 flex items-center justify-center overflow-hidden">
-                          {scheduledCourse ? (
+                        <div className="min-h-12 sm:min-h-16 flex items-center justify-center overflow-hidden relative">
+                          {full ? (
+                            // Full 2-hour course takes entire cell
                             <div
                               className={`px-1 py-0.5 sm:px-1.5 sm:py-1 rounded text-white ${getCourseColor(
-                                scheduledCourse.uniqueId
-                              )} w-full text-center shadow-md hover:shadow-lg transition-shadow duration-200`}
-                              title={`${scheduledCourse.courseName} - ${scheduledCourse.staff} (${scheduledCourse.uniqueId})`}
+                                full.uniqueId
+                              )} w-full h-full text-center shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center justify-center cursor-pointer`}
+                              title={`${full.courseName} - ${full.staff} (${full.uniqueId})`}
                             >
-                              {/* Display Name - Always visible */}
-                              <div className="font-semibold text-[10px] sm:text-xs truncate">
-                                {scheduledCourse.displayName
-                                  ? scheduledCourse.displayName.toUpperCase()
-                                  : scheduledCourse.courseName}
+                              <div className="font-semibold text-[10px] sm:text-xs truncate w-full">
+                                {full.displayName
+                                  ? full.displayName.toUpperCase()
+                                  : full.courseName}
+                              </div>
+                              <div className="text-[9px] sm:text-[10px] md:text-[16px] opacity-90 truncate mt-0.5 w-full">
+                                {full.staff}
+                              </div>
+                            </div>
+                          ) : (left || right) ? (
+                            // Split cell - show left and/or right half courses
+                            <div className="flex w-full h-full gap-0.5">
+                              {/* Left Half (first hour of block) */}
+                              <div className="flex-1 flex items-center justify-center">
+                                {left ? (
+                                  <div
+                                    className={`px-0.5 py-0.5 sm:px-1 sm:py-1 rounded text-white ${getCourseColor(
+                                      left.uniqueId
+                                    )} w-full h-full text-center shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center justify-center cursor-pointer border-r-2 border-gray-800`}
+                                    title={`${left.courseName} - ${left.staff} (${left.uniqueId})`}
+                                  >
+                                    <div className="font-semibold text-[9px] sm:text-[10px] truncate w-full">
+                                      {left.displayName
+                                        ? left.displayName.toUpperCase()
+                                        : left.courseName}
+                                    </div>
+                                    <div className="text-[8px] sm:text-[9px] opacity-90 truncate mt-0.5 w-full">
+                                      {left.staff}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <span className="text-gray-500 text-[9px] sm:text-[10px]">Free</span>
+                                )}
                               </div>
 
-                              {/* Staff - Always visible */}
-                              <div className=" text-[9px] sm:text-[10px] md:text[16px] opacity-90 truncate mt-0.5">
-                                {scheduledCourse.staff}
+                              {/* Right Half (second hour of block) */}
+                              <div className="flex-1 flex items-center justify-center">
+                                {right ? (
+                                  <div
+                                    className={`px-0.5 py-0.5 sm:px-1 sm:py-1 rounded text-white ${getCourseColor(
+                                      right.uniqueId
+                                    )} w-full h-full text-center shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center justify-center cursor-pointer border-l-2 border-gray-800`}
+                                    title={`${right.courseName} - ${right.staff} (${right.uniqueId})`}
+                                  >
+                                    <div className="font-semibold text-[9px] sm:text-[10px] truncate w-full">
+                                      {right.displayName
+                                        ? right.displayName.toUpperCase()
+                                        : right.courseName}
+                                    </div>
+                                    <div className="text-[8px] sm:text-[9px] opacity-90 truncate mt-0.5 w-full">
+                                      {right.staff}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <span className="text-gray-500 text-[9px] sm:text-[10px]">Free</span>
+                                )}
                               </div>
                             </div>
                           ) : (
+                            // Completely free cell
                             <span className="text-gray-500 text-[10px] sm:text-xs">
                               Free
                             </span>

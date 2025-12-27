@@ -1,6 +1,5 @@
 import CourseSchedule from "../models/courseSchedule.model.js";
 
-
 export const getAllCourses = async (req, res) => {
     try {
         const courses = await CourseSchedule.find();
@@ -83,25 +82,9 @@ export const filterCoursesByDays = async (req, res) => {
 };
 
 export const filterCoursesByTimes = async (req, res) => {
-    let { times } = req.query;
-
     try {
-        if (!times) {
-            return res.status(400).json({ message: "times is not provided in query parameter filterCoursesByDays courseSchedule.controller.js" });
-        }
-
-        if (!Array.isArray(times)) {
-            times = times.replace(/[\[\]\s]/g, "").split(",");
-        }
-
-        const condition = {
-            $and: times.map((time) => ({
-                slots: { $not: { $elemMatch: { time } } },
-            }))
-        };
-
-        const filteredCourses = await CourseSchedule.find(condition);
-        res.status(200).json({ message: `Courses with no classes on ${times} was fetched from DB`, filteredCourses })
+        const allCourses = await CourseSchedule.find();
+        res.status(200).json({ message: "Fetched all courses for client-side filtering", filteredCourses: allCourses })
 
     } catch (err) {
         res.status(500).json({ message: "Error from filterCoursesByTimes courseSchedule.controller.js ", error: err.message })

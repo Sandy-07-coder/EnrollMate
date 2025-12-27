@@ -1,3 +1,4 @@
+import { doSlotsOverlap } from './timeSlots';
 
 const filterByFreeDaysAndTimes = (days, courses, times) => {
     // If no filters selected, return all courses
@@ -12,10 +13,22 @@ const filterByFreeDaysAndTimes = (days, courses, times) => {
         for (const courseSlot of course.slots) {
             const courseDay = courseSlot.day;
             const courseTime = courseSlot.time;
-            if (days.includes(courseDay) || times.includes(courseTime)) {
+            
+            // Check if course day matches any selected free day
+            if (days.includes(courseDay)) {
                 flag = false;
                 break;
             }
+            
+            // Check if course time overlaps with any selected free time
+            for (const freeTime of times) {
+                if (doSlotsOverlap(courseTime, freeTime)) {
+                    flag = false;
+                    break;
+                }
+            }
+            
+            if (!flag) break;
         }
         if (flag) filteredCourses.push(course);
     }

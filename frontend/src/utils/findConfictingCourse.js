@@ -1,3 +1,4 @@
+import { doSlotsOverlap, getSlotLabel } from './timeSlots';
 
 const findConflictingCourses = (newCourse, selectedCourses) => {
     const conflicts = [];
@@ -7,7 +8,8 @@ const findConflictingCourses = (newCourse, selectedCourses) => {
     for (const existingCourse of selectedCourses) {
         for (const existingSlot of existingCourse.slots) {
             for (const newSlot of newCourse.slots) {
-                if (existingSlot.day === newSlot.day && existingSlot.time === newSlot.time) {
+                // Check if same day and overlapping time
+                if (existingSlot.day === newSlot.day && doSlotsOverlap(existingSlot.time, newSlot.time)) {
                     conflicts.push({
                         confictingCourse: existingCourse,
                         message: `"${existingCourse.courseName}" (${existingCourse.uniqueId}) is already scheduled on ${existingSlot.day} at ${existingSlot.time}`
