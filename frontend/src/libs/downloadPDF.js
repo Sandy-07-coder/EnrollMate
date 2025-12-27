@@ -1,12 +1,27 @@
-/**
- * Downloads the timetable as a styled HTML file
- * @param {Array} selectedCourses - Array of selected courses
- * @param {string} filename - The name for the HTML file
- * @returns {Promise<Object>}
- */
 export const downloadTimetableHTML = async (selectedCourses, filename = 'timetable') => {
     try {
-        // Days and time slots
+        // Helper functions for time slot parsing and overlap detection
+        const parseTimeSlot = (slotString) => {
+            const [startStr, endStr] = slotString.split('-').map(s => s.trim());
+            let start = parseInt(startStr, 10);
+            let end = parseInt(endStr, 10);
+            if (start >= 1 && start <= 5) start += 12;
+            if (end >= 1 && end <= 5) end += 12;
+            return { start, end };
+        };
+
+        const doSlotsOverlap = (slot1, slot2) => {
+            const time1 = parseTimeSlot(slot1);
+            const time2 = parseTimeSlot(slot2);
+            return time1.start < time2.end && time2.start < time1.end;
+        };
+
+        const getSlotDuration = (slotString) => {
+            const { start, end } = parseTimeSlot(slotString);
+            return end - start;
+        };
+
+        // Days and 2-hour time blocks (matching the UI)
         const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
         const timeSlots = [
             { label: '8:00 AM - 10:00 AM', value: '8-10' },
@@ -15,20 +30,45 @@ export const downloadTimetableHTML = async (selectedCourses, filename = 'timetab
             { label: '3:00 PM - 5:00 PM', value: '3-5' }
         ];
 
-        // Create timetable grid
+        // Create timetable grid - each block can have left, right, or full course
         const timetableGrid = {};
         days.forEach(day => {
             timetableGrid[day] = {};
+            timeSlots.forEach(slot => {
+                timetableGrid[day][slot.value] = { left: null, right: null, full: null };
+            });
         });
 
         // Fill timetable with courses
         selectedCourses.forEach(course => {
             if (course.slots && Array.isArray(course.slots)) {
                 course.slots.forEach(slot => {
-                    if (!timetableGrid[slot.day]) {
-                        timetableGrid[slot.day] = {};
-                    }
-                    timetableGrid[slot.day][slot.time] = course;
+                    if (!timetableGrid[slot.day]) return;
+
+                    const duration = getSlotDuration(slot.time);
+                    const [slotStart] = slot.time.split('-').map(s => parseInt(s, 10));
+
+                    // Find which 2-hour block this course belongs to
+                    timeSlots.forEach(block => {
+                        if (doSlotsOverlap(slot.time, block.value)) {
+                            const [blockStart, blockEnd] = block.value.split('-').map(s => parseInt(s, 10));
+                            
+                            if (duration === 2 && slot.time === block.value) {
+                                // Full 2-hour course
+                                timetableGrid[slot.day][block.value].full = course;
+                            } else if (duration === 1) {
+                                // 1-hour course - determine if left or right half
+                                const leftSlot = `${blockStart}-${blockStart + 1}`;
+                                const rightSlot = `${blockStart + 1}-${blockEnd}`;
+                                
+                                if (slot.time === leftSlot || doSlotsOverlap(slot.time, leftSlot)) {
+                                    timetableGrid[slot.day][block.value].left = course;
+                                } else if (slot.time === rightSlot || doSlotsOverlap(slot.time, rightSlot)) {
+                                    timetableGrid[slot.day][block.value].right = course;
+                                }
+                            }
+                        }
+                    });
                 });
             }
         });
@@ -169,6 +209,30 @@ export const downloadTimetableHTML = async (selectedCourses, filename = 'timetab
       color: white;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
       line-height: 1.4;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    
+    .split-cell {
+      display: flex;
+      gap: 4px;
+      height: 100%;
+    }
+    
+    .half-cell {
+      flex: 1;
+      padding: 8px 4px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
     
     .course-name {
@@ -277,19 +341,52 @@ export const downloadTimetableHTML = async (selectedCourses, filename = 'timetab
             <tr>
               <td class="time-slot">${day}</td>
               ${timeSlots.map(slot => {
-            const course = (timetableGrid[day] || {})[slot.value];
-            if (course) {
-                return `
-                    <td>
-                      <div class="course-cell" style="background: ${courseColors[course.uniqueId]};">
-                        <div class="course-name">${course.courseName}</div>
-                        <div class="course-id">${course.uniqueId}</div>
-                      </div>
-                    </td>
-                  `;
-            }
-            return '<td></td>';
-        }).join('')}
+                const blockData = (timetableGrid[day] || {})[slot.value] || { left: null, right: null, full: null };
+                const { left, right, full } = blockData;
+                
+                if (full) {
+                    // Full 2-hour course
+                    return `
+                        <td>
+                          <div class="course-cell" style="background: ${courseColors[full.uniqueId]};">
+                            <div class="course-name">${full.courseName}</div>
+                            <div class="course-id">${full.uniqueId}</div>
+                          </div>
+                        </td>
+                      `;
+                } else if (left || right) {
+                    // Split cell with 1-hour courses
+                    return `
+                        <td>
+                          <div class="split-cell">
+                            ${left ? `
+                              <div class="half-cell" style="background: ${courseColors[left.uniqueId]}; border-right: 2px solid rgba(31, 41, 55, 0.8);">
+                                <div style="font-size: 11px; margin-bottom: 2px;">${left.displayName ? left.displayName.toUpperCase() : left.courseName}</div>
+                                <div style="font-size: 9px; opacity: 0.9;">${left.uniqueId}</div>
+                              </div>
+                            ` : `
+                              <div class="half-cell" style="background: rgba(55, 65, 81, 0.3);">
+                                <span style="font-size: 10px; color: #9ca3af;">Free</span>
+                              </div>
+                            `}
+                            ${right ? `
+                              <div class="half-cell" style="background: ${courseColors[right.uniqueId]}; border-left: 2px solid rgba(31, 41, 55, 0.8);">
+                                <div style="font-size: 11px; margin-bottom: 2px;">${right.displayName ? right.displayName.toUpperCase() : right.courseName}</div>
+                                <div style="font-size: 9px; opacity: 0.9;">${right.uniqueId}</div>
+                              </div>
+                            ` : `
+                              <div class="half-cell" style="background: rgba(55, 65, 81, 0.3);">
+                                <span style="font-size: 10px; color: #9ca3af;">Free</span>
+                              </div>
+                            `}
+                          </div>
+                        </td>
+                      `;
+                } else {
+                    // Completely free cell
+                    return '<td><span style="color: #9ca3af; font-size: 12px;">Free</span></td>';
+                }
+            }).join('')}
             </tr>
           `).join('')}
         </tbody>
