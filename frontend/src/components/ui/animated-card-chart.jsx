@@ -9,7 +9,7 @@ export function AnimatedCard({ className, ...props }) {
         <div
             role="region"
             className={cn(
-                "group/animated-card relative overflow-hidden rounded-xl border border-white/10 bg-[#0f172a] shadow-lg",
+                "group/animated-card relative overflow-hidden rounded-2xl border border-[#E8EEFF] bg-white shadow-sm hover:shadow-md transition-shadow duration-300",
                 className
             )}
             {...props}
@@ -22,7 +22,7 @@ export function CardBody({ className, ...props }) {
         <div
             role="group"
             className={cn(
-                "flex flex-col space-y-1.5 border-t border-white/10 p-4",
+                "flex flex-col space-y-2 border-t border-[#F0F4FF] p-5",
                 className
             )}
             {...props}
@@ -34,7 +34,7 @@ export function CardTitle({ className, ...props }) {
     return (
         <h3
             className={cn(
-                "text-lg font-semibold leading-none tracking-tight text-white",
+                "text-base font-semibold leading-tight tracking-tight text-[#1A2B4A]",
                 className
             )}
             {...props}
@@ -46,7 +46,7 @@ export function CardDescription({ className, ...props }) {
     return (
         <p
             className={cn(
-                "text-sm text-gray-400",
+                "text-sm text-[#718096] leading-relaxed",
                 className
             )}
             {...props}
@@ -110,7 +110,7 @@ const GridLayer = ({ color }) => {
     return (
         <div
             style={{ "--grid-color": color }}
-            className="pointer-events-none absolute inset-0 z-[4] h-full w-full bg-transparent bg-[linear-gradient(to_right,var(--grid-color)_1px,transparent_1px),linear-gradient(to_bottom,var(--grid-color)_1px,transparent_1px)] bg-[size:20px_20px] bg-center opacity-70 [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"
+            className="pointer-events-none absolute inset-0 z-[4] h-full w-full bg-transparent bg-[linear-gradient(to_right,var(--grid-color)_1px,transparent_1px),linear-gradient(to_bottom,var(--grid-color)_1px,transparent_1px)] bg-[size:24px_24px] bg-center opacity-40 [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_40%,transparent_100%)]"
         />
     );
 };
@@ -149,21 +149,21 @@ const EllipseGradient = ({ color }) => {
 const Layer1 = ({ color, secondaryColor, stat1, stat2 }) => {
     return (
         <div
-            className="absolute top-4 left-4 z-[8] flex items-center gap-1"
+            className="absolute top-3 left-3 z-[8] flex items-center gap-1.5"
             style={{
                 "--color": color,
                 "--secondary-color": secondaryColor,
             }}
         >
-            <div className="flex shrink-0 items-center rounded-full border border-white/20 bg-black/25 px-1.5 py-0.5 backdrop-blur-sm transition-opacity duration-300 ease-in-out group-hover/animated-card:opacity-0">
+            <div className="flex shrink-0 items-center rounded-full bg-white/90 px-2 py-1 shadow-sm transition-opacity duration-300 ease-in-out group-hover/animated-card:opacity-0">
                 <div className="h-1.5 w-1.5 rounded-full bg-[var(--color)]" />
-                <span className="ml-1 text-[10px] text-white">
+                <span className="ml-1.5 text-[10px] font-medium text-[#1A2B4A]">
                     {stat1}
                 </span>
             </div>
-            <div className="flex shrink-0 items-center rounded-full border border-white/20 bg-black/25 px-1.5 py-0.5 backdrop-blur-sm transition-opacity duration-300 ease-in-out group-hover/animated-card:opacity-0">
+            <div className="flex shrink-0 items-center rounded-full bg-white/90 px-2 py-1 shadow-sm transition-opacity duration-300 ease-in-out group-hover/animated-card:opacity-0">
                 <div className="h-1.5 w-1.5 rounded-full bg-[var(--secondary-color)]" />
-                <span className="ml-1 text-[10px] text-white">
+                <span className="ml-1.5 text-[10px] font-medium text-[#1A2B4A]">
                     {stat2}
                 </span>
             </div>
@@ -177,15 +177,15 @@ const Layer2 = ({ color, hoverTitle, hoverDesc }) => {
             className="group relative h-full w-full"
             style={{ "--color": color }}
         >
-            <div className="ease-[cubic-bezier(0.6, 0.6, 0, 1)] absolute inset-0 z-[7] flex w-full translate-y-full items-start justify-center bg-transparent p-4 transition-transform duration-500 group-hover/animated-card:translate-y-0">
-                <div className="ease-[cubic-bezier(0.6, 0, 1)] rounded-md border border-white/20 bg-black/25 p-1.5 opacity-0 backdrop-blur-sm transition-opacity duration-500 group-hover/animated-card:opacity-100">
+            <div className="ease-[cubic-bezier(0.6, 0.6, 0, 1)] absolute inset-0 z-[15] flex w-full translate-y-full items-start justify-center bg-transparent p-4 transition-transform duration-500 group-hover/animated-card:translate-y-0">
+                <div className="ease-[cubic-bezier(0.6, 0, 1)] rounded-md border border-[#C8D7FF] bg-white/90 p-1.5 opacity-0 backdrop-blur-sm transition-opacity duration-500 shadow-lg group-hover/animated-card:opacity-100">
                     <div className="flex items-center gap-2">
                         <div className="h-2 w-2 shrink-0 rounded-full bg-[var(--color)]" />
-                        <p className="text-xs text-white">
+                        <p className="text-xs text-[#1A2B4A] font-medium">
                             {hoverTitle}
                         </p>
                     </div>
-                    <p className="text-xs text-gray-400">
+                    <p className="text-xs text-[#4A5568]">
                         {hoverDesc}
                     </p>
                 </div>

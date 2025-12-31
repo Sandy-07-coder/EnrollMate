@@ -2,59 +2,71 @@
 
 /* ============================================
    ENROLLMATE DESIGN SYSTEM
-   Modern, Sleek UI with Be Vietnam Pro
+   Modern Light Blue Theme
    ============================================ */
 
-/* CSS Custom Properties */
+/* CSS Custom Properties - Light Blue Palette */
 :root {
-  /* Primary Colors */
-  --color-primary: #6366f1;
-  --color-primary-light: #818cf8;
-  --color-primary-dark: #4f46e5;
-  
+  /* Primary Colors - Deep Blue */
+  --color-primary: #4F7CFF;
+  --color-primary-light: #7BA3FF;
+  --color-primary-dark: #3B5FCC;
+
   /* Accent Colors */
-  --color-accent-blue: #3b82f6;
-  --color-accent-purple: #a855f7;
-  --color-accent-pink: #ec4899;
-  --color-accent-cyan: #06b6d4;
-  --color-accent-green: #10b981;
-  --color-accent-orange: #f97316;
-  
-  /* Background Colors */
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
-  --bg-tertiary: #334155;
-  --bg-card: rgba(30, 41, 59, 0.8);
-  --bg-glass: rgba(15, 23, 42, 0.75);
-  
+  --color-accent-blue: #5B8DEF;
+  --color-accent-purple: #8B9FFF;
+  --color-accent-pink: #B8C4FF;
+  --color-accent-cyan: #A3D4FF;
+  --color-accent-green: #7ECCAA;
+  --color-accent-orange: #FFB38A;
+
+  /* Background Colors - Light Blue Gradient */
+  --bg-primary: #F0F4FF;
+  --bg-secondary: #E8EEFF;
+  --bg-tertiary: #DCE5FF;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-glass: rgba(255, 255, 255, 0.75);
+  --bg-white: #FFFFFF;
+
+  /* Blue Palette Steps (from image) */
+  --blue-50: #F8FAFF;
+  --blue-100: #F0F4FF;
+  --blue-200: #E8EEFF;
+  --blue-300: #DCE5FF;
+  --blue-400: #C8D7FF;
+  --blue-500: #B4C8FF;
+  --blue-600: #9BB5FF;
+  --blue-700: #7BA3FF;
+
   /* Text Colors */
-  --text-primary: #f8fafc;
-  --text-secondary: #cbd5e1;
-  --text-muted: #64748b;
-  
+  --text-primary: #1A2B4A;
+  --text-secondary: #4A5568;
+  --text-muted: #718096;
+
   /* Border Colors */
-  --border-primary: rgba(148, 163, 184, 0.2);
-  --border-focus: rgba(99, 102, 241, 0.5);
-  
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
-  --shadow-glow-lg: 0 0 40px rgba(99, 102, 241, 0.4);
-  
+  --border-primary: rgba(79, 124, 255, 0.15);
+  --border-focus: rgba(79, 124, 255, 0.5);
+
+  /* Shadows - Softer for light theme */
+  --shadow-sm: 0 1px 3px rgba(79, 124, 255, 0.08);
+  --shadow-md: 0 4px 12px rgba(79, 124, 255, 0.1);
+  --shadow-lg: 0 10px 24px rgba(79, 124, 255, 0.12);
+  --shadow-xl: 0 20px 40px rgba(79, 124, 255, 0.15);
+  --shadow-glow: 0 0 20px rgba(79, 124, 255, 0.2);
+  --shadow-glow-lg: 0 0 40px rgba(79, 124, 255, 0.25);
+
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-  --gradient-secondary: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
-  --gradient-success: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
-  --gradient-bg: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-  
+  --gradient-primary: linear-gradient(135deg, #4F7CFF 0%, #8B9FFF 50%, #B8C4FF 100%);
+  --gradient-secondary: linear-gradient(135deg, #5B8DEF 0%, #A3D4FF 100%);
+  --gradient-success: linear-gradient(135deg, #7ECCAA 0%, #5B8DEF 100%);
+  --gradient-bg: linear-gradient(180deg, #F8FAFF 0%, #E8EEFF 50%, #DCE5FF 100%);
+  --gradient-hero: linear-gradient(180deg, #F0F4FF 0%, #DCE5FF 100%);
+
   /* Timing */
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
   --transition-slow: 350ms ease;
-  
+
   /* Border Radius */
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
@@ -71,15 +83,18 @@
 
 html {
   scroll-behavior: smooth;
+  background: #F0F4FF;
 }
 
 body {
   font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg-primary);
+  background: linear-gradient(180deg, #F8FAFF 0%, #E8EEFF 50%, #DCE5FF 100%);
+  background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
 }
 
 /* Custom Scrollbar */
@@ -89,12 +104,12 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: var(--blue-100);
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--bg-tertiary);
+  background: var(--blue-400);
   border-radius: var(--radius-full);
   transition: background var(--transition-normal);
 }
@@ -106,7 +121,7 @@ body {
 /* Firefox Scrollbar */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--bg-tertiary) var(--bg-secondary);
+  scrollbar-color: var(--blue-400) var(--blue-100);
 }
 
 /* Selection */
@@ -121,8 +136,26 @@ body {
   outline-offset: 2px;
 }
 
+/* Touch Device Support - Make hover work on tap */
+@media (hover: none) {
+
+  .hover\:scale-\[1\.02\]:active,
+  .hover\:shadow-xl:active {
+    transform: scale(1.02);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+
+  .hover\:scale-105:active {
+    transform: scale(1.05);
+  }
+
+  .hover\:scale-110:active {
+    transform: scale(1.1);
+  }
+}
+
 /* ============================================
-   GLASSMORPHISM UTILITIES
+   GLASSMORPHISM UTILITIES - Light Theme
    ============================================ */
 
 .glass {
@@ -133,10 +166,10 @@ body {
 }
 
 .glass-light {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(79, 124, 255, 0.1);
 }
 
 .glass-card {
@@ -157,6 +190,7 @@ body {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -168,6 +202,7 @@ body {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -179,6 +214,7 @@ body {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -190,6 +226,7 @@ body {
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -201,6 +238,7 @@ body {
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -208,18 +246,24 @@ body {
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
   }
+
   50% {
     box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
   }
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-10px);
   }
@@ -229,15 +273,19 @@ body {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
 }
 
 @keyframes gradient-shift {
-  0%, 100% {
+
+  0%,
+  100% {
     background-position: 0% 50%;
   }
+
   50% {
     background-position: 100% 50%;
   }
@@ -278,12 +326,29 @@ body {
 }
 
 /* Stagger animations */
-.stagger-1 { animation-delay: 0.1s; }
-.stagger-2 { animation-delay: 0.2s; }
-.stagger-3 { animation-delay: 0.3s; }
-.stagger-4 { animation-delay: 0.4s; }
-.stagger-5 { animation-delay: 0.5s; }
-.stagger-6 { animation-delay: 0.6s; }
+.stagger-1 {
+  animation-delay: 0.1s;
+}
+
+.stagger-2 {
+  animation-delay: 0.2s;
+}
+
+.stagger-3 {
+  animation-delay: 0.3s;
+}
+
+.stagger-4 {
+  animation-delay: 0.4s;
+}
+
+.stagger-5 {
+  animation-delay: 0.5s;
+}
+
+.stagger-6 {
+  animation-delay: 0.6s;
+}
 
 /* ============================================
    BUTTON STYLES
@@ -428,9 +493,47 @@ body {
 
 /* Touch-friendly sizing on mobile */
 @media (max-width: 640px) {
+
   .btn-primary,
   .btn-secondary {
     min-height: 44px;
     padding: 0.625rem 1.25rem;
   }
+}
+
+/* ============================================
+   3D CARD UTILITIES
+   ============================================ */
+
+.perspective-\[1000px\] {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.group\/3d:hover .group-hover\/3d\:rotate-x-\[15deg\] {
+  transform: rotate3d(1, 1, 0, 25deg);
+  box-shadow: rgba(0, 0, 0, 0.3) 30px 50px 25px -40px, rgba(0, 0, 0, 0.1) 0px 25px 30px 0px;
+}
+
+.group\/3d:hover .group-hover\/3d\:translate-z-\[60px\] {
+  transform: translate3d(0, 0, 60px);
+}
+
+.group\/3d:hover .group-hover\/3d\:translate-z-\[80px\] {
+  transform: translate3d(0, 0, 80px);
+}
+
+.group\/3d:hover .group-hover\/3d\:translate-z-\[100px\] {
+  transform: translate3d(0, 0, 100px);
+}
+
+.group\/3d:hover .group-hover\/3d\:translate-z-\[120px\] {
+  transform: translate3d(0, 0, 120px);
+}
+
+.group\/3d:hover .group-hover\/3d\:scale-110 {
+  transform: scale(1.1);
 }

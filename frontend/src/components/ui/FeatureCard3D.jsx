@@ -123,38 +123,6 @@ const FeatureCard3D = ({
                     </div>
                 </div>
             </div>
-
-            {/* Custom CSS for 3D transforms */}
-            <style jsx>{`
-        .perspective-\\[1000px\\] {
-          perspective: 1000px;
-        }
-        .preserve-3d {
-          transform-style: preserve-3d;
-        }
-        .group-hover\\/3d\\:rotate-x-\\[15deg\\]:hover {
-          --tw-rotate-x: 15deg;
-        }
-        .group\\/3d:hover .group-hover\\/3d\\:rotate-x-\\[15deg\\] {
-          transform: rotate3d(1, 1, 0, 25deg);
-          box-shadow: rgba(0, 0, 0, 0.3) 30px 50px 25px -40px, rgba(0, 0, 0, 0.1) 0px 25px 30px 0px;
-        }
-        .translate-z-\\[60px\\] {
-          transform: translate3d(0, 0, 60px);
-        }
-        .group\\/3d:hover .group-hover\\/3d\\:translate-z-\\[60px\\] {
-          transform: translate3d(0, 0, 60px);
-        }
-        .group\\/3d:hover .group-hover\\/3d\\:translate-z-\\[80px\\] {
-          transform: translate3d(0, 0, 80px);
-        }
-        .group\\/3d:hover .group-hover\\/3d\\:translate-z-\\[100px\\] {
-          transform: translate3d(0, 0, 100px);
-        }
-        .group\\/3d:hover .group-hover\\/3d\\:translate-z-\\[120px\\] {
-          transform: translate3d(0, 0, 120px);
-        }
-      `}</style>
         </div>
     );
 };
