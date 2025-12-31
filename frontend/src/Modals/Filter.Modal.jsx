@@ -72,7 +72,7 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
 
   // Apply filters
   const handleApplyFilters = () => {
-    setFilterOptions(selectedDays, selectedTimes, notConflict,notSameSubject);
+    setFilterOptions(selectedDays, selectedTimes, notConflict, notSameSubject);
     filterCourses();
   };
 
@@ -116,76 +116,72 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
 
     if (result.isConflict) {
       showConflictToast(() => {
-        // Optional: You can handle viewing conflict details here if needed
         console.log("Conflict details:", result.conflicts);
       });
       return;
     }
 
-    // Success - course added
     showSuccessToast();
-
-    // Navigate back to subjects view
     handleBackToSubjects();
-    // Re-apply filters to update the results
     handleApplyFilters();
   };
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-        <div className="bg-gray-800 rounded-xl shadow-2xl border border-gray-700 w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="modal-overlay" onClick={() => setIsFilterModalOpen(false)}>
+        <div
+          className="modal-content w-full max-w-4xl max-h-[90vh] flex flex-col"
+          onClick={(e) => e.stopPropagation()}
+        >
           {/* Header */}
-          <div className="bg-linear-to-r from-blue-600 to-purple-600 px-6 py-4 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-indigo-600 to-purple-600 px-5 sm:px-6 py-4 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
-              <Filter className="text-white" size={24} />
-              <h2 className="text-xl font-semibold text-white">
+              <Filter className="text-white" size={22} />
+              <h2 className="text-lg sm:text-xl font-semibold text-white">
                 Filter Courses
               </h2>
             </div>
             <button
-              onClick={() => {
-                setIsFilterModalOpen(false);
-              }}
-              className="text-white hover:bg-white/20 rounded-lg p-1.5 transition-colors duration-200"
+              onClick={() => setIsFilterModalOpen(false)}
+              className="text-white/80 hover:text-white hover:bg-white/20 rounded-lg p-1.5 transition-all duration-200"
               aria-label="Close modal"
             >
-              <X size={24} />
+              <X size={22} />
             </button>
           </div>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
               {/* Left Column - Days and Times (2 columns) */}
-              <div className="space-y-6 lg:col-span-2">
+              <div className="space-y-5 lg:col-span-2">
                 {/* Free Days Section */}
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                    <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                  <h3 className="text-sm sm:text-base font-semibold text-white mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-indigo-500 rounded-full"></span>
                     Free Days
                   </h3>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {DAYS.map((day) => (
                       <div
                         key={day}
-                        className="flex items-center gap-3 bg-gray-900/50 p-3 rounded-lg hover:bg-gray-900 transition-colors duration-200"
+                        className="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors duration-200 group"
                       >
                         <Checkbox.Root
                           checked={selectedDays.includes(day)}
                           onCheckedChange={(checked) =>
                             handleDayChange(day, checked)
                           }
-                          className="w-5 h-5 bg-gray-700 border-2 border-gray-600 rounded flex items-center justify-center hover:border-blue-500 transition-colors duration-200 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
+                          className="w-5 h-5 bg-white/10 border border-white/20 rounded flex items-center justify-center hover:border-indigo-500/50 transition-all duration-200 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-600"
                           id={`day-${day}`}
                         >
                           <Checkbox.Indicator>
-                            <CheckIcon className="text-white" size={16} />
+                            <CheckIcon className="text-white" size={14} />
                           </Checkbox.Indicator>
                         </Checkbox.Root>
                         <label
                           htmlFor={`day-${day}`}
-                          className="text-gray-300 cursor-pointer flex-1"
+                          className="text-gray-300 cursor-pointer flex-1 text-sm group-hover:text-white transition-colors duration-200"
                         >
                           {day}
                         </label>
@@ -196,31 +192,31 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
 
                 {/* Free Hours Section */}
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                  <h3 className="text-sm sm:text-base font-semibold text-white mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-emerald-500 rounded-full"></span>
                     Free Hours
                   </h3>
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {TIME_SLOTS.map((time) => (
                       <div
                         key={time}
-                        className="flex items-center gap-3 bg-gray-900/50 p-3 rounded-lg hover:bg-gray-900 transition-colors duration-200"
+                        className="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors duration-200 group"
                       >
                         <Checkbox.Root
                           checked={selectedTimes.includes(time)}
                           onCheckedChange={(checked) =>
                             handleTimeChange(time, checked)
                           }
-                          className="w-5 h-5 bg-gray-700 border-2 border-gray-600 rounded flex items-center justify-center hover:border-green-500 transition-colors duration-200 data-[state=checked]:bg-green-600 data-[state=checked]:border-green-600"
+                          className="w-5 h-5 bg-white/10 border border-white/20 rounded flex items-center justify-center hover:border-emerald-500/50 transition-all duration-200 data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
                           id={`time-${time}`}
                         >
                           <Checkbox.Indicator>
-                            <CheckIcon className="text-white" size={16} />
+                            <CheckIcon className="text-white" size={14} />
                           </Checkbox.Indicator>
                         </Checkbox.Root>
                         <label
                           htmlFor={`time-${time}`}
-                          className="text-gray-300 cursor-pointer flex-1"
+                          className="text-gray-300 cursor-pointer flex-1 text-sm group-hover:text-white transition-colors duration-200"
                         >
                           {time}
                         </label>
@@ -231,24 +227,24 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
 
                 {/* Non-Conflicting Courses */}
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                  <h3 className="text-sm sm:text-base font-semibold text-white mb-3 flex items-center gap-2">
                     <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
                     Conflict Filter
                   </h3>
-                  <div className="flex items-center gap-3 bg-gray-900/50 p-4 rounded-lg hover:bg-gray-900 transition-colors duration-200">
+                  <div className="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors duration-200 group">
                     <Checkbox.Root
                       checked={notConflict}
                       onCheckedChange={(checked) => setNotConflict(checked)}
-                      className="w-5 h-5 bg-gray-700 border-2 border-gray-600 rounded flex items-center justify-center hover:border-purple-500 transition-colors duration-200 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
+                      className="w-5 h-5 bg-white/10 border border-white/20 rounded flex items-center justify-center hover:border-purple-500/50 transition-all duration-200 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
                       id="not-conflict"
                     >
                       <Checkbox.Indicator>
-                        <CheckIcon className="text-white" size={16} />
+                        <CheckIcon className="text-white" size={14} />
                       </Checkbox.Indicator>
                     </Checkbox.Root>
                     <label
                       htmlFor="not-conflict"
-                      className="text-gray-300 cursor-pointer flex-1"
+                      className="text-gray-300 cursor-pointer flex-1 text-sm group-hover:text-white transition-colors duration-200"
                     >
                       Show only non-conflicting courses
                     </label>
@@ -257,24 +253,24 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
 
                 {/* Non-Selected Subject only */}
                 <div>
-                  <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                    <span className="w-2 h-2 bg-purple-500 rounded-full"></span>
-                    Non-Selected Subject Filter
+                  <h3 className="text-sm sm:text-base font-semibold text-white mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-amber-500 rounded-full"></span>
+                    Subject Filter
                   </h3>
-                  <div className="flex items-center gap-3 bg-gray-900/50 p-4 rounded-lg hover:bg-gray-900 transition-colors duration-200">
+                  <div className="flex items-center gap-3 bg-white/5 p-3 rounded-lg hover:bg-white/10 transition-colors duration-200 group">
                     <Checkbox.Root
                       checked={notSameSubject}
                       onCheckedChange={(checked) => setNotSameSubject(checked)}
-                      className="w-5 h-5 bg-gray-700 border-2 border-gray-600 rounded flex items-center justify-center hover:border-purple-500 transition-colors duration-200 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
-                      id="not-conflict"
+                      className="w-5 h-5 bg-white/10 border border-white/20 rounded flex items-center justify-center hover:border-amber-500/50 transition-all duration-200 data-[state=checked]:bg-amber-600 data-[state=checked]:border-amber-600"
+                      id="not-same-subject"
                     >
                       <Checkbox.Indicator>
-                        <CheckIcon className="text-white" size={16} />
+                        <CheckIcon className="text-white" size={14} />
                       </Checkbox.Indicator>
                     </Checkbox.Root>
                     <label
-                      htmlFor="not-conflict"
-                      className="text-gray-300 cursor-pointer flex-1"
+                      htmlFor="not-same-subject"
+                      className="text-gray-300 cursor-pointer flex-1 text-sm group-hover:text-white transition-colors duration-200"
                     >
                       Show only non-selected subjects
                     </label>
@@ -282,43 +278,41 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
                 </div>
               </div>
 
-
               {/* Right Column - Filtered Results (3 columns) */}
-              <div className="bg-gray-900/30 rounded-lg p-6 border border-gray-700/50 lg:col-span-3 flex flex-col">
+              <div className="bg-white/5 rounded-xl p-4 sm:p-5 border border-white/10 lg:col-span-3 flex flex-col min-h-[300px]">
                 <div className="flex items-center gap-3 mb-4">
                   {showCourses && (
                     <button
                       onClick={handleBackToSubjects}
-                      className="text-white hover:text-blue-400 transition-colors duration-200"
+                      className="text-gray-400 hover:text-white hover:bg-white/10 p-1.5 rounded-lg transition-all duration-200"
                       aria-label="Back to subjects"
                     >
-                      <ArrowLeft size={20} />
+                      <ArrowLeft size={18} />
                     </button>
                   )}
-                  <h3 className="text-lg font-semibold text-white">
+                  <h3 className="text-sm sm:text-base font-semibold text-white">
                     {showCourses ? (
                       <>
                         Courses in {selectedSubject}
-                        <span className="text-sm text-gray-400 ml-2">
+                        <span className="text-xs sm:text-sm text-gray-400 ml-2 font-normal">
                           ({courseByName?.length || 0} courses)
                         </span>
                       </>
                     ) : (
                       <>
                         Filtered Results
-                        <span className="text-sm text-gray-400 ml-2">
+                        <span className="text-xs sm:text-sm text-gray-400 ml-2 font-normal">
                           ({subjectDetails.length} subjects found)
                         </span>
                       </>
                     )}
                   </h3>
                 </div>
-                {/* Scrollable Results Area with Custom Scrollbar */}
-                <div className="flex-1 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-white scrollbar-track-gray-700 hover:scrollbar-thumb-gray-300">
+                {/* Scrollable Results Area */}
+                <div className="flex-1 overflow-y-auto pr-1">
                   {showCourses ? (
-                    // Show courses for selected subject
                     courseByName && courseByName.length > 0 ? (
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         {courseByName.map((course, index) => (
                           <CourseCard
                             key={index}
@@ -329,13 +323,12 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
                       </div>
                     ) : (
                       <div className="text-gray-400 text-sm text-center py-12">
-                        <Filter className="mx-auto mb-3 opacity-50" size={48} />
+                        <Filter className="mx-auto mb-3 opacity-40" size={40} />
                         <p>No courses found</p>
                       </div>
                     )
                   ) : subjectDetails.length > 0 ? (
-                    // Show subjects
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       {subjectDetails.map((subject, index) => (
                         <SubjectCard
                           key={index}
@@ -349,9 +342,9 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
                     </div>
                   ) : (
                     <div className="text-gray-400 text-sm text-center py-12">
-                      <Filter className="mx-auto mb-3 opacity-50" size={48} />
+                      <Filter className="mx-auto mb-3 opacity-40" size={40} />
                       <p>No results yet</p>
-                      <p className="text-xs mt-2">
+                      <p className="text-xs mt-2 text-gray-500">
                         Select filters and click "Apply Filters" to see results
                       </p>
                     </div>
@@ -362,27 +355,23 @@ const FilterModal = ({ isFilterModalOpen, setIsFilterModalOpen }) => {
           </div>
 
           {/* Footer */}
-          <div className="bg-gray-900/50 px-6 py-4 border-t border-gray-700 flex justify-between items-center gap-4">
+          <div className="bg-white/5 px-4 sm:px-6 py-4 border-t border-white/10 flex flex-col sm:flex-row justify-between items-center gap-3 shrink-0">
             <button
               onClick={handleResetFilters}
-              className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+              className="w-full sm:w-auto px-4 py-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 text-sm font-medium"
             >
               Reset Filters
             </button>
-            <div className="flex gap-3">
+            <div className="flex gap-3 w-full sm:w-auto">
               <button
-                onClick={() => {
-                  setIsFilterModalOpen(false);
-                }}
-                className="px-4 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                onClick={() => setIsFilterModalOpen(false)}
+                className="flex-1 sm:flex-none px-4 py-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all duration-200 text-sm font-medium"
               >
                 Cancel
               </button>
               <button
-                onClick={() => {
-                  handleApplyFilters();
-                }}
-                className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
+                onClick={() => handleApplyFilters()}
+                className="flex-1 sm:flex-none px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium rounded-lg transition-all duration-200 text-sm shadow-lg hover:shadow-indigo-500/25"
               >
                 Apply Filters
               </button>

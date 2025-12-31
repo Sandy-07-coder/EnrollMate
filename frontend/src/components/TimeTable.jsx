@@ -14,42 +14,38 @@ const TimeTable = () => {
   ];
   const TIME_SLOTS = ["8-10", "10-12", "1-3", "3-5"];
 
-  // Array of colors for different courses
-  const courseColors = [
-    "bg-blue-600",
-    "bg-purple-600",
-    "bg-green-600",
-    "bg-orange-600",
-    "bg-pink-600",
-    "bg-indigo-600",
-    "bg-teal-600",
-    "bg-rose-600",
-    "bg-cyan-600",
-    "bg-amber-600",
+  // Modern gradient colors for courses
+  const courseGradients = [
+    "from-indigo-600 to-purple-600",
+    "from-purple-600 to-pink-600",
+    "from-emerald-600 to-teal-600",
+    "from-orange-500 to-amber-500",
+    "from-rose-600 to-pink-600",
+    "from-blue-600 to-cyan-600",
+    "from-violet-600 to-indigo-600",
+    "from-teal-500 to-emerald-500",
+    "from-fuchsia-600 to-purple-600",
+    "from-amber-500 to-orange-500",
   ];
 
-  // Function to get a consistent color for each course based on uniqueId
-  const getCourseColor = (uniqueId) => {
-    if (!uniqueId) return courseColors[0];
+  // Function to get a consistent gradient for each course based on uniqueId
+  const getCourseGradient = (uniqueId) => {
+    if (!uniqueId) return courseGradients[0];
 
     const allCourseIds = selectedCourses.map((c) => c.uniqueId).sort();
-
     const colorIndex = allCourseIds.indexOf(uniqueId);
 
     return colorIndex !== -1
-      ? courseColors[colorIndex % courseColors.length]
-      : courseColors[0];
+      ? courseGradients[colorIndex % courseGradients.length]
+      : courseGradients[0];
   };
 
   // Get all courses that overlap with a given 2-hour time block
-  // Returns an object with courses positioned by their 1-hour slot within the block
   const getCoursesForBlock = (day, blockSlot) => {
     if (!selectedCourses || selectedCourses.length === 0) return { left: null, right: null, full: null };
 
     const result = { left: null, right: null, full: null };
-    
-    // Parse block slot to get the two 1-hour slots it contains
-    // e.g., "8-10" contains "8-9" (left) and "9-10" (right)
+
     const [blockStart, blockEnd] = blockSlot.split('-').map(s => parseInt(s, 10));
     const leftSlot = `${blockStart}-${blockStart + 1}`;
     const rightSlot = `${blockStart + 1}-${blockEnd}`;
@@ -61,16 +57,13 @@ const TimeTable = () => {
         if (slot.day !== day) return;
 
         const duration = getSlotDuration(slot.time);
-        
-        // Check if this course overlaps with our block
+
         if (doSlotsOverlap(slot.time, blockSlot)) {
           if (duration === 2) {
-            // 2-hour course fills the entire block
             if (slot.time === blockSlot) {
               result.full = course;
             }
           } else if (duration === 1) {
-            // 1-hour course - determine if it's left or right half
             if (slot.time === leftSlot || doSlotsOverlap(slot.time, leftSlot)) {
               result.left = course;
             } else if (slot.time === rightSlot || doSlotsOverlap(slot.time, rightSlot)) {
@@ -85,38 +78,38 @@ const TimeTable = () => {
   };
 
   return (
-    <div className="h-full bg-transparent p-2 sm:p-4 lg:p-8">
+    <div className="h-full bg-transparent p-3 sm:p-5 lg:p-8">
       {/* Header */}
-      <div className="mb-3 sm:mb-6 lg:mb-8">
-        <h2 className="text-xl sm:text-2xl lg:text-4xl font-bold text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-500 mb-1 sm:mb-2">
+      <div className="mb-4 sm:mb-6 lg:mb-8">
+        <h2 className="text-xl sm:text-2xl lg:text-4xl font-bold gradient-text mb-1 sm:mb-2">
           Course Schedule
         </h2>
-        <p className="text-gray-400 text-xs sm:text-sm lg:text-lg">
+        <p className="text-gray-400 text-xs sm:text-sm lg:text-base">
           Your weekly course timetable overview
         </p>
       </div>
 
       {/* Timetable Container */}
       <div className="w-full">
-        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
+        <div className="overflow-x-auto">
           <table
-            className="w-full bg-gray-800 border border-gray-600 rounded-lg shadow-lg text-sm table-fixed"
+            className="w-full border-separate border-spacing-0 text-sm"
             style={{ minWidth: "100%" }}
           >
             <thead>
-              <tr className="bg-gray-700">
-                {/* Day Column - Fixed width */}
+              <tr>
+                {/* Day Column */}
                 <th
-                  className="px-1 py-1.5 sm:px-2 sm:py-2 text-left text-white font-semibold border-b border-gray-600 text-[10px] sm:text-xs lg:text-sm"
+                  className="px-2 py-2 sm:px-3 sm:py-3 text-left text-gray-300 font-semibold text-[10px] sm:text-xs lg:text-sm bg-white/5 rounded-tl-xl border-b border-r border-white/10"
                   style={{ width: "15%" }}
                 >
                   <div className="truncate">Day/Time</div>
                 </th>
-                {/* Time Slot Columns - Equal width distribution */}
-                {TIME_SLOTS.map((slot) => (
+                {/* Time Slot Columns */}
+                {TIME_SLOTS.map((slot, index) => (
                   <th
                     key={slot}
-                    className="px-1 py-1.5 sm:px-2 sm:py-2 text-center text-white font-semibold border-b border-l border-gray-600 text-[10px] sm:text-xs lg:text-sm"
+                    className={`px-2 py-2 sm:px-3 sm:py-3 text-center text-gray-300 font-semibold text-[10px] sm:text-xs lg:text-sm bg-white/5 border-b border-white/10 ${index === TIME_SLOTS.length - 1 ? 'rounded-tr-xl' : 'border-r'}`}
                     style={{ width: `${85 / TIME_SLOTS.length}%` }}
                   >
                     {slot}
@@ -128,35 +121,31 @@ const TimeTable = () => {
               {DAYS.map((day, dayIndex) => (
                 <tr
                   key={day}
-                  className={`${
-                    dayIndex % 2 === 0 ? "bg-gray-800" : "bg-gray-750"
-                  } hover:bg-gray-700 transition-colors duration-200`}
+                  className="group"
                 >
-                  {/* Day Cell - Fixed width */}
-                  <td className="px-1 py-1.5 sm:px-2 sm:py-2 text-white font-medium border-b border-gray-600 text-[10px] sm:text-xs lg:text-sm">
+                  {/* Day Cell */}
+                  <td className={`px-2 py-2 sm:px-3 sm:py-3 text-gray-300 font-medium text-[10px] sm:text-xs lg:text-sm border-r border-white/10 bg-white/[0.02] group-hover:bg-white/[0.04] transition-colors duration-200 ${dayIndex === DAYS.length - 1 ? 'rounded-bl-xl border-b-0' : 'border-b border-white/10'}`}>
                     <div className="truncate">
-                      {/* Show first 3 letters on mobile, full name on tablet+ */}
                       <span className="sm:hidden">{day.substring(0, 3)}</span>
                       <span className="hidden sm:inline">{day}</span>
                     </div>
                   </td>
 
-                  {/* Time Slot Cells - Each cell can contain left half, right half, or full course */}
-                  {TIME_SLOTS.map((slot) => {
+                  {/* Time Slot Cells */}
+                  {TIME_SLOTS.map((slot, slotIndex) => {
                     const { left, right, full } = getCoursesForBlock(day, slot);
+                    const isLastRow = dayIndex === DAYS.length - 1;
+                    const isLastCol = slotIndex === TIME_SLOTS.length - 1;
 
                     return (
                       <td
                         key={`${day}-${slot}`}
-                        className="px-0.5 py-1 sm:px-1 sm:py-2 border-b border-l border-gray-600 relative"
+                        className={`px-1 py-1.5 sm:px-2 sm:py-2 relative bg-white/[0.02] group-hover:bg-white/[0.04] transition-colors duration-200 ${isLastRow ? 'border-b-0' : 'border-b border-white/10'} ${isLastCol ? (isLastRow ? 'rounded-br-xl' : '') : 'border-r border-white/10'}`}
                       >
-                        <div className="min-h-12 sm:min-h-16 flex items-center justify-center overflow-hidden relative">
+                        <div className="min-h-14 sm:min-h-18 flex items-center justify-center overflow-hidden relative">
                           {full ? (
-                            // Full 2-hour course takes entire cell
                             <div
-                              className={`px-1 py-0.5 sm:px-1.5 sm:py-1 rounded text-white ${getCourseColor(
-                                full.uniqueId
-                              )} w-full h-full text-center shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center justify-center cursor-pointer`}
+                              className={`px-1.5 py-1 sm:px-2 sm:py-1.5 rounded-lg text-white bg-gradient-to-br ${getCourseGradient(full.uniqueId)} w-full h-full text-center shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex flex-col items-center justify-center cursor-pointer`}
                               title={`${full.courseName} - ${full.staff} (${full.uniqueId})`}
                             >
                               <div className="font-semibold text-[10px] sm:text-xs truncate w-full">
@@ -164,20 +153,17 @@ const TimeTable = () => {
                                   ? full.displayName.toUpperCase()
                                   : full.courseName}
                               </div>
-                              <div className="text-[9px] sm:text-[10px] md:text-[16px] opacity-90 truncate mt-0.5 w-full">
+                              <div className="text-[9px] sm:text-[10px] lg:text-xs opacity-90 truncate mt-0.5 w-full font-light">
                                 {full.staff}
                               </div>
                             </div>
                           ) : (left || right) ? (
-                            // Split cell - show left and/or right half courses
-                            <div className="flex w-full h-full gap-0.5">
-                              {/* Left Half (first hour of block) */}
+                            <div className="flex w-full h-full gap-1">
+                              {/* Left Half */}
                               <div className="flex-1 flex items-center justify-center">
                                 {left ? (
                                   <div
-                                    className={`px-0.5 py-0.5 sm:px-1 sm:py-1 rounded text-white ${getCourseColor(
-                                      left.uniqueId
-                                    )} w-full h-full text-center shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center justify-center cursor-pointer border-r-2 border-gray-800`}
+                                    className={`px-1 py-1 sm:px-1.5 sm:py-1 rounded-lg text-white bg-gradient-to-br ${getCourseGradient(left.uniqueId)} w-full h-full text-center shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex flex-col items-center justify-center cursor-pointer`}
                                     title={`${left.courseName} - ${left.staff} (${left.uniqueId})`}
                                   >
                                     <div className="font-semibold text-[9px] sm:text-[10px] truncate w-full">
@@ -190,17 +176,15 @@ const TimeTable = () => {
                                     </div>
                                   </div>
                                 ) : (
-                                  <span className="text-gray-500 text-[9px] sm:text-[10px]">Free</span>
+                                  <span className="text-gray-600 text-[9px] sm:text-[10px]">—</span>
                                 )}
                               </div>
 
-                              {/* Right Half (second hour of block) */}
+                              {/* Right Half */}
                               <div className="flex-1 flex items-center justify-center">
                                 {right ? (
                                   <div
-                                    className={`px-0.5 py-0.5 sm:px-1 sm:py-1 rounded text-white ${getCourseColor(
-                                      right.uniqueId
-                                    )} w-full h-full text-center shadow-md hover:shadow-lg transition-shadow duration-200 flex flex-col items-center justify-center cursor-pointer border-l-2 border-gray-800`}
+                                    className={`px-1 py-1 sm:px-1.5 sm:py-1 rounded-lg text-white bg-gradient-to-br ${getCourseGradient(right.uniqueId)} w-full h-full text-center shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex flex-col items-center justify-center cursor-pointer`}
                                     title={`${right.courseName} - ${right.staff} (${right.uniqueId})`}
                                   >
                                     <div className="font-semibold text-[9px] sm:text-[10px] truncate w-full">
@@ -213,14 +197,13 @@ const TimeTable = () => {
                                     </div>
                                   </div>
                                 ) : (
-                                  <span className="text-gray-500 text-[9px] sm:text-[10px]">Free</span>
+                                  <span className="text-gray-600 text-[9px] sm:text-[10px]">—</span>
                                 )}
                               </div>
                             </div>
                           ) : (
-                            // Completely free cell
-                            <span className="text-gray-500 text-[10px] sm:text-xs">
-                              Free
+                            <span className="text-gray-600 text-[10px] sm:text-xs">
+                              —
                             </span>
                           )}
                         </div>
@@ -235,16 +218,16 @@ const TimeTable = () => {
       </div>
 
       {/* Footer Stats */}
-      <div className="mt-3 sm:mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-3 text-[10px] sm:text-xs lg:text-sm text-gray-400">
-        <span className="flex items-center gap-1.5 sm:gap-2">
-          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full"></div>
-          {selectedCourses.length} course(s) scheduled
-        </span>
-        <div className="flex gap-2 sm:gap-4 text-[10px] sm:text-xs">
-          <span className="bg-gray-700/50 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded">
+      <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs sm:text-sm">
+        <div className="flex items-center gap-2 text-gray-400">
+          <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
+          <span>{selectedCourses.length} course(s) scheduled</span>
+        </div>
+        <div className="flex gap-2 sm:gap-3">
+          <span className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 text-xs">
             {DAYS.length} days
           </span>
-          <span className="bg-gray-700/50 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded">
+          <span className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-gray-300 text-xs">
             {TIME_SLOTS.length} periods
           </span>
         </div>
