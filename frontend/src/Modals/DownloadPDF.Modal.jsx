@@ -48,24 +48,24 @@ const DownloadPDFModal = ({ closeModal }) => {
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+      className="modal-overlay"
       onClick={closeModal}
     >
       <div
-        className="bg-gray-800 rounded-xl shadow-2xl border border-gray-700 max-w-md w-full p-6 space-y-6"
+        className="modal-content max-w-md w-full p-6 space-y-5"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="bg-green-600/20 p-2 rounded-lg">
-              <Download className="w-6 h-6 text-green-400" />
+            <div className="bg-gradient-to-br from-emerald-600 to-teal-600 p-2.5 rounded-xl shadow-lg shadow-emerald-500/20">
+              <Download className="w-5 h-5 text-white" />
             </div>
             <h2 className="text-xl font-bold text-white">Download Timetable</h2>
           </div>
           <button
             onClick={closeModal}
-            className="text-gray-400 hover:text-white transition-colors p-1 hover:bg-gray-700 rounded-lg"
+            className="text-gray-400 hover:text-white transition-colors p-1.5 hover:bg-white/10 rounded-lg"
             disabled={isDownloading}
           >
             <X className="w-5 h-5" />
@@ -88,21 +88,21 @@ const DownloadPDFModal = ({ closeModal }) => {
               onChange={(e) => setFilename(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Enter filename"
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500/50 focus:bg-white/10 transition-all duration-300"
               disabled={isDownloading}
               autoFocus
             />
-            <p className="text-xs text-gray-400 mt-1.5">
+            <p className="text-xs text-gray-500 mt-2">
               File will be saved as "{filename}.html"
             </p>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3">
+        <div className="flex gap-3 pt-2">
           <button
             onClick={closeModal}
-            className="flex-1 bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300"
+            className="flex-1 bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 border border-white/10"
             disabled={isDownloading}
           >
             Cancel
@@ -110,7 +110,7 @@ const DownloadPDFModal = ({ closeModal }) => {
           <button
             onClick={handleDownload}
             disabled={isDownloading}
-            className="flex-1 bg-linear-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 disabled:from-gray-600 disabled:to-gray-600 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center gap-2"
+            className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 disabled:from-gray-600 disabled:to-gray-600 text-white font-medium py-3 px-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30"
           >
             {isDownloading ? (
               <>

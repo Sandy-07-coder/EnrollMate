@@ -29,7 +29,7 @@ const HomePage = () => {
 
     const interval = setInterval(() => {
       getCourses();
-    }, 5 * 60 * 1000); // every 5 minutes
+    }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, [courses?.length, getCourses]);
@@ -58,26 +58,42 @@ const HomePage = () => {
 
   return (
     <>
-      <main className="min-h-screen bg-linear-to-br from-slate-900 via-gray-900 to-slate-800">
+      <main className="min-h-screen bg-[#0f172a] relative">
+        {/* Subtle Background Pattern */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl"></div>
+        </div>
+
         <Header
           openConflictModal={openConflictModal}
           isFilterModalOpen={isFilterModalOpen}
           setIsFilterModalOpen={setIsFilterModalOpen}
         />
+
         <Toaster
-          toastOptions={{ style: { marginTop: "60px" } }}
+          toastOptions={{
+            style: {
+              marginTop: "60px",
+              background: "#1e293b",
+              color: "#f8fafc",
+              border: "1px solid rgba(148, 163, 184, 0.2)",
+              borderRadius: "12px",
+            },
+          }}
           position="top-center"
         />
+
         {/* Main Content Container */}
-        <div className="container mx-auto px-2 sm:px-4 lg:px-8 py-4 lg:py-8">
-          <section className="grid grid-cols-1 xl:grid-cols-4 gap-4 lg:gap-8 min-h-[calc(100vh-120px)]">
+        <div className="relative container mx-auto px-3 sm:px-4 lg:px-8 py-4 lg:py-8">
+          <section className="grid grid-cols-1 xl:grid-cols-4 gap-4 lg:gap-6 min-h-[calc(100vh-120px)]">
             {/* Timetable Section - Full width on mobile, 3 cols on desktop */}
-            <div className="xl:col-span-3 bg-gray-800/50 backdrop-blur-sm rounded-xl lg:rounded-2xl shadow-2xl border border-gray-700/50 overflow-hidden">
+            <div className="xl:col-span-3 glass-card overflow-hidden animate-fade-in">
               <TimeTable />
             </div>
 
             {/* Selected Courses Section - Full width on mobile, 1 col on desktop */}
-            <div className="xl:col-span-1 h-fit">
+            <div className="xl:col-span-1 h-fit animate-fade-in" style={{ animationDelay: '0.1s' }}>
               <SelectedCoursesBox onDownloadClick={openDownloadModal} />
             </div>
           </section>

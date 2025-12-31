@@ -16,24 +16,25 @@ const SelectedCoursesBox = ({ onDownloadClick }) => {
   };
 
   return (
-    <div className="bg-gray-800/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-gray-700/50 p-4 sm:p-6 h-fit">
-      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-transparent bg-clip-text bg-linear-to-r from-green-400 to-teal-400 mb-4 sm:mb-6 text-center">
+    <div className="glass-card p-4 sm:p-6 h-fit">
+      <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold gradient-text-success mb-4 sm:mb-6 text-center">
         Selected Courses
       </h3>
 
-      <div className="space-y-3 sm:space-y-4 max-h-[400px] sm:max-h-[500px] overflow-y-auto">
+      <div className="space-y-3 max-h-[400px] sm:max-h-[500px] overflow-y-auto pr-1">
         {selectedCourses.length > 0 ? (
           selectedCourses.map((course, index) => (
             <div
               key={course._id || index}
-              className="bg-gray-700/70 backdrop-blur-sm rounded-xl p-3 sm:p-4 border border-gray-600/50 hover:border-gray-500/50 transition-all duration-300 hover:shadow-lg overflow-hidden"
+              className="group bg-white/5 hover:bg-white/10 rounded-xl p-3 sm:p-4 border border-white/10 hover:border-indigo-500/30 transition-all duration-300 animate-fade-in"
+              style={{ animationDelay: `${index * 0.05}s` }}
             >
               <div className="flex justify-between items-start gap-2 mb-2 sm:mb-3">
                 <div className="flex-1 min-w-0">
-                  <h4 className="text-white font-medium text-sm sm:text-base wrap-break-word mb-1 leading-tight">
+                  <h4 className="text-gray-200 font-medium text-sm sm:text-base break-words mb-1 leading-tight group-hover:text-white transition-colors duration-200">
                     {course.courseName}
                   </h4>
-                  <span className="text-xs sm:text-sm lg:text-base font-bold text-transparent bg-clip-text bg-linear-to-r from-yellow-400 via-orange-400 to-pink-500 block">
+                  <span className="text-xs sm:text-sm font-semibold gradient-text block">
                     ({course.displayName?.toUpperCase()})
                   </span>
                 </div>
@@ -41,7 +42,7 @@ const SelectedCoursesBox = ({ onDownloadClick }) => {
                   onClick={() => {
                     handleRemoveSelectedCourse(course.uniqueId);
                   }}
-                  className="text-red-400 hover:text-red-300 hover:bg-red-500/10 p-1.5 rounded-lg transition-all duration-200 shrink-0 self-start"
+                  className="text-gray-500 hover:text-red-400 hover:bg-red-500/10 p-1.5 sm:p-2 rounded-lg transition-all duration-200 shrink-0 self-start"
                   aria-label="Remove course"
                 >
                   <svg
@@ -59,10 +60,10 @@ const SelectedCoursesBox = ({ onDownloadClick }) => {
                   </svg>
                 </button>
               </div>
-              <div className="text-gray-400 text-xs sm:text-sm mb-2">
-                <span className="flex items-center gap-1">
+              <div className="text-gray-400 text-xs sm:text-sm mb-2.5">
+                <span className="flex items-center gap-1.5">
                   <svg
-                    className="w-3 h-3"
+                    className="w-3.5 h-3.5 text-gray-500"
                     fill="currentColor"
                     viewBox="0 0 20 20"
                   >
@@ -76,20 +77,20 @@ const SelectedCoursesBox = ({ onDownloadClick }) => {
                 </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-blue-400 font-mono text-xs sm:text-sm bg-blue-500/10 px-2 py-1 rounded-lg">
+                <span className="text-indigo-400 font-mono text-xs sm:text-sm bg-indigo-500/10 px-2.5 py-1 rounded-lg">
                   {course.uniqueId}
                 </span>
-                <span className="text-green-400 text-xs sm:text-sm font-medium bg-green-500/10 px-2 py-1 rounded-lg">
+                <span className="text-emerald-400 text-xs sm:text-sm font-medium bg-emerald-500/10 px-2.5 py-1 rounded-lg">
                   {course.credits} Credits
                 </span>
               </div>
             </div>
           ))
         ) : (
-          <div className="text-center py-8 sm:py-12">
-            <div className="text-gray-500 mb-3">
+          <div className="text-center py-10 sm:py-14">
+            <div className="mb-4">
               <svg
-                className="w-12 h-12 sm:w-16 sm:h-16 mx-auto opacity-50"
+                className="w-14 h-14 sm:w-16 sm:h-16 mx-auto text-gray-600"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -102,7 +103,7 @@ const SelectedCoursesBox = ({ onDownloadClick }) => {
                 />
               </svg>
             </div>
-            <p className="text-gray-400 text-sm sm:text-base">
+            <p className="text-gray-400 text-sm sm:text-base font-medium">
               No courses selected
             </p>
             <p className="text-gray-500 text-xs sm:text-sm mt-1">
@@ -112,17 +113,17 @@ const SelectedCoursesBox = ({ onDownloadClick }) => {
         )}
       </div>
 
-      <div className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-600/50">
+      <div className="mt-5 sm:mt-6 pt-4 border-t border-white/10">
         <div className="flex justify-between text-gray-300 text-xs sm:text-sm mb-4">
-          <span className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+          <span className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-indigo-500 rounded-full"></div>
             Total Courses:{" "}
             <span className="font-semibold text-white">
               {selectedCourses.length}
             </span>
           </span>
-          <span className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+          <span className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
             Total Credits:{" "}
             <span className="font-semibold text-white">{totalCredits}</span>
           </span>
