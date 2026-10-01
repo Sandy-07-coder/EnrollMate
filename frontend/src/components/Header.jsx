@@ -6,8 +6,8 @@ import { showDuplicateToast } from "../utils/toasts/duplicate.toast";
 import { showSameSubjectToast } from "../utils/toasts/sameSubject.toast";
 import { showSuccessToast } from "../utils/toasts/success.toast";
 import hasConflict from "../utils/hasConflict";
-import { Search, X, SlidersHorizontal, Check, AlertCircle, Sun, Moon } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Search, X, SlidersHorizontal, Check, AlertCircle, Sun, Moon, RefreshCw } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { useThemeStore } from "../store/themeStore";
 
 const Header = ({
@@ -22,6 +22,7 @@ const Header = ({
   const inputRef = useRef(null);
   
   const { isDarkMode, toggleTheme } = useThemeStore();
+  const navigate = useNavigate();
 
   const {
     searchedCourses,
@@ -198,6 +199,16 @@ const Header = ({
               <span className="hidden sm:inline">Filters</span>
             </button>
           </div>
+
+          {/* Change Data */}
+          <button
+            onClick={() => navigate('/', { state: { skipRedirect: true } })}
+            className="inline-flex items-center gap-1.5 h-9 px-3 rounded-lg text-[13px] font-medium text-[var(--text-mid)] hover:text-[var(--text-charcoal)] hover:bg-[var(--bg-off)] transition-all"
+            title="Change course data"
+          >
+            <RefreshCw size={14} />
+            <span className="hidden sm:inline">Change Data</span>
+          </button>
 
           {/* Theme Toggle */}
           <button
