@@ -98,7 +98,7 @@ export function parseRawCourseData(rawText) {
     }
 
     // Section line
-    const sm = line.match(/^UG\s*-\s*\d+,\s*(T2-[\w-]+),\s*\w+\s*-\s*(.+)$/);
+    const sm = line.match(/^UG\s*-\s*\d+,\s*(T\d+-[\w-]+),\s*\w+\s*-\s*(.+)$/);
     if (sm) {
       saveSection();
       section = sm[1];
