@@ -5,7 +5,6 @@ import hasSameSubjects from '../utils/hasSameSubject';
 import filterByFreeDaysAndTimes from '../utils/filterByFreeDaysAndTimes';
 import filterByNotConflict from '../utils/filterByNotConflict';
 import findSubjectDetails from '../utils/findSubjectDetails';
-import { parseExtensionData } from '../utils/parseExtensionData';
 
 export const useCourseStore = create(
     persist(
@@ -23,33 +22,6 @@ export const useCourseStore = create(
             },
             filteredCourses: [],
             coursesByName: [],
-
-
-            // Load courses from Chrome extension data
-            loadCoursesFromExtension: () => {
-                const result = parseExtensionData();
-                
-                if (result.success && result.courses.length > 0) {
-                    set({ courses: result.courses });
-                    console.log(`✅ Loaded ${result.valid} courses from extension`);
-                    
-                    if (result.errors) {
-                        console.warn(`⚠️ ${result.errors.length} courses failed validation`);
-                    }
-                    
-                    return {
-                        success: true,
-                        loaded: result.valid,
-                        failed: result.errors?.length || 0
-                    };
-                } else {
-                    console.warn('❌ No valid courses found in extension data');
-                    return {
-                        success: false,
-                        error: result.error || 'No courses found'
-                    };
-                }
-            },
 
             // Set courses directly (for manual data loading)
             setCourses: (courses) => {

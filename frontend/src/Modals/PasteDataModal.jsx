@@ -27,8 +27,6 @@ const PasteDataModal = ({ isOpen, onClose }) => {
         return;
       }
       setCourses(courses);
-      localStorage.setItem("enrollmate_courses", JSON.stringify(courses));
-      localStorage.setItem("enrollmate_timestamp", new Date().toISOString());
       setStatus({ type: "success", message: `Loaded ${courses.length} course sections` });
       setTimeout(() => { onClose(); navigate("/home", { replace: true }); }, 1000);
     } catch (err) {
